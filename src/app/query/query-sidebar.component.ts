@@ -11,6 +11,7 @@ import {bufferCount, flatMap, map} from 'rxjs/operators';
 import {FilterService} from '../core/queries/filter.service';
 import {QueryContainerComponent} from './containers/query-container.component';
 import {TemporalFusionFunction} from '../shared/model/results/fusion/temporal-fusion-function.model';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class QuerySidebarComponent implements OnInit {
   /** A timestamp used to store the timestamp of the last Enter-hit by the user. Required for shortcut detection. */
   private _lastEnter: number = 0;
 
-  constructor(private _queryService: QueryService, private _filterService: FilterService, private _eventBus: EventBusService) {
+  constructor(private _queryService: QueryService, private _filterService: FilterService, private _eventBus: EventBusService, private _router: Router) {
   }
 
   /**
@@ -85,6 +86,17 @@ export class QuerySidebarComponent implements OnInit {
       }),
       bufferCount(Number.MIN_SAFE_INTEGER)
     ).subscribe(c => this._eventBus.publish(new InteractionEvent(...c)))
+  }
+
+  private _size = '';
+
+  onKey(event: any) { // without type info
+    this._size = event.target.value;
+  }
+
+  public onSomTrainClicked() {
+    this._queryService.trainSOM(this._size);
+    this._router.navigateByUrl('som-overview');
   }
 
   /**

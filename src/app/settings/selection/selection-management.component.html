@@ -12,6 +12,19 @@
       </button>
     </mat-list-item>
 
+    <mat-list-item fxLayout="row" fxLayoutAlign="center">
+      <button (click)="onGetSomClustersClicked()" color="primary" mat-raised-button matTooltip="Get cluster contents">
+        Get clusters
+      </button>
+    </mat-list-item>
+
+
+    <mat-list-item fxLayout="row" fxLayoutAlign="center">
+      <button (click)="onUpdateSomSelectionClicked()" color="primary" mat-raised-button matTooltip="Retrain SOM">
+        Retrain SOM
+      </button>
+    </mat-list-item>
+
     <mat-list-item *ngFor="let current of (selection | async).entries()">
       <button (click)="onSegmentClicked(current[0])" mat-flat-button>{{current[0]}}</button>
       <button (click)="onTagButtonClicked(current[0],tag[0])" *ngFor="let tag of current[1].entries()" mat-icon-button>

@@ -4,7 +4,7 @@ import {MediaObjectScoreContainer} from './media-object-score-container.model';
 import {SegmentScoreContainer} from './segment-score-container.model';
 import {WeightedFeatureCategory} from '../weighted-feature-category.model';
 import {ObjectQueryResult} from '../../messages/interfaces/responses/query-result-object.interface';
-import {SegmentQueryResult} from '../../messages/interfaces/responses/query-result-segment.interface';
+import {SegmentQueryResult, SEGMENT_TYPE} from '../../messages/interfaces/responses/query-result-segment.interface';
 import {SimilarityQueryResult} from '../../messages/interfaces/responses/query-result-similarty.interface';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {FeatureCategories} from '../feature-categories.model';
@@ -30,6 +30,7 @@ import {FilterType} from '../../../../settings/refinement/filtertype.model';
 import {TemporalFusionFunction} from '../fusion/temporal-fusion-function.model';
 import {AverageFusionFunction} from '../fusion/average-fusion-function.model';
 import {MaxpoolFusionFunction} from '../fusion/maxpool-fusion-function.model';
+import { SomClusterQueryResult } from '../../messages/interfaces/responses/query-result-som-cluster.interface';
 
 export class ResultsContainer {
   /** A Map that maps objectId's to their MediaObjectScoreContainer. This is where the results of a query are assembled. */
@@ -41,7 +42,17 @@ export class ResultsContainer {
   /** Internal data structure that contains all MediaObjectScoreContainers. */
   private _results_objects: MediaObjectScoreContainer[] = [];
 
-  /** Internal data structure that contains all SegmentScoreContainers. */
+  /** Internal data structure that contains SegmentScoreContainers of the SomComponent (SEGMENT_TYPE.SOM_OVERVIEW). */
+  private _results_som_overview_segments: SegmentScoreContainer[] = [];
+  /** A subject that can be used to publish changes to the results. */
+  private _results_som_overview_segments_subject: BehaviorSubject<SegmentScoreContainer[]> = new BehaviorSubject(this._results_som_overview_segments);
+
+  /** Internal data structure that contains SegmentScoreContainers of the ClusterComponent component (SEGMENT_TYPE.SOM_CLUSTER). */
+  private _results_som_cluster_segments: SegmentScoreContainer[] = [];
+  /** A subject that can be used to publish changes to the results. */
+  private _results_som_cluster_segments_subject: BehaviorSubject<SegmentScoreContainer[]> = new BehaviorSubject(this._results_som_cluster_segments);
+
+  /** Internal data structure that does not contain SOM related SegmentScoreContainers (SEGMENT_TYPE.DEFAULT). */
   private _results_segments: SegmentScoreContainer[] = [];
   /** A subject that can be used to publish changes to the results. */
   private _results_objects_subject: BehaviorSubject<MediaObjectScoreContainer[]> = new BehaviorSubject(this._results_objects);
@@ -142,6 +153,14 @@ export class ResultsContainer {
 
   get segmentsAsObservable(): Observable<SegmentScoreContainer[]> {
     return this._results_segments_subject.asObservable();
+  }
+
+  get somOverviewSegmentsAsObservable(): Observable<SegmentScoreContainer[]> {
+    return this._results_som_overview_segments_subject.asObservable();
+  }
+
+  get somClusterSegmentsAsObservable(): Observable<SegmentScoreContainer[]> {
+    return this._results_som_cluster_segments_subject.asObservable();
   }
 
   get featuresAsObservable(): Observable<WeightedFeatureCategory[]> {
@@ -362,14 +381,23 @@ export class ResultsContainer {
       const mosc = this.uniqueMediaObjectScoreContainer(segment.objectId);
       const ssc = mosc.addMediaSegment(segment);
       if (!this._segmentid_to_segment_map.has(segment.segmentId)) {
-        this._results_segments.push(ssc);
         this._segmentid_to_segment_map.set(segment.segmentId, ssc);
+        if (seg.type === SEGMENT_TYPE.DEFAULT) {
+          this._results_segments.push(ssc);
+          /* Re-rank on the UI side - this also invokes next(). */
+          this._rerank += 1;
+        }
+      }
+      if (seg.type === SEGMENT_TYPE.SOM_OVERVIEW) {
+        this._results_som_overview_segments.push(ssc);
+        this._next += 1;
+      } else if (seg.type === SEGMENT_TYPE.SOM_CLUSTER) {
+        this._results_som_cluster_segments.push(ssc);
+        this._next += 1;
       }
     }
     console.timeEnd(`Processing Segment Message (${this.queryId})`);
 
-    /* Re-rank on the UI side - this also invokes next(). */
-    this._rerank += 1;
 
     /* Return true. */
     return true;
@@ -451,12 +479,24 @@ export class ResultsContainer {
     return true;
   }
 
+  public processSomClusterMessage(som: SomClusterQueryResult) {
+    if (som.queryId !== this.queryId) {
+      console.warn(`som train result query id ${som.queryId} does not match query id ${this.queryId}`);
+      return false;
+    }
+    this._results_som_cluster_segments = [];
+    this.next();
+    return true;
+  }
+
   /**
    * Completes the two subjects and invalidates them thereby.
    */
   public complete() {
     this._results_objects_subject.complete();
     this._results_segments_subject.complete();
+    this._results_som_overview_segments_subject.complete();
+    this._results_som_cluster_segments_subject.complete();
     this._results_features_subject.complete();
   }
 
@@ -518,6 +558,8 @@ export class ResultsContainer {
   private next() {
     this._next = 0;
     this._results_segments_subject.next(this._results_segments.filter(v => v.objectScoreContainer.show)); /* Filter segments that are not ready. */
+    this._results_som_overview_segments_subject.next(this._results_som_overview_segments.filter(v => v.objectScoreContainer.show)); /* Filter segments that are not ready. */
+    this._results_som_cluster_segments_subject.next(this._results_som_cluster_segments.filter(v => v.objectScoreContainer.show)); /* Filter segments that are not ready. */
     this._results_objects_subject.next(this._results_objects.filter(v => v.show));
     this._results_features_subject.next(this._features);
   }

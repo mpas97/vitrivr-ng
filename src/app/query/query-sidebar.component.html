@@ -1,6 +1,14 @@
 <div style="text-align:center;">
 
   <div [style.margin-bottom]="'15px'">
+    <input [style.margin-bottom]="'5px'" placeholder="SOM grid size" (keyup)="onKey($event)">
+    <button (click)="onSomTrainClicked()" [color]="'accent'" mat-raised-button style="width:100%">
+      <mat-icon>gradient</mat-icon>
+      Train SOM
+    </button>
+  </div>
+
+  <div [style.margin-bottom]="'15px'">
     <button (click)="onSearchClicked()" (keydown.control.enter)="onSearchClicked()" [color]="'accent'" mat-raised-button
             style="width:100%">
       <mat-icon>search</mat-icon>

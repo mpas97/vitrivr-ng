@@ -7,6 +7,8 @@ import {EvaluationComponent} from './evaluation/evaluation.component';
 import {MiniGalleryComponent} from './results/gallery/mini-gallery.component';
 import {ListComponent} from './results/list/list.component';
 import {TemporalListComponent} from './results/temporal/temporal-list.component';
+import { SomComponent } from './results/som/som.component';
+import { ClusterComponent } from './results/som/cluster.component';
 
 /**
  * Defines the application's routes.
@@ -23,6 +25,8 @@ const appRoutes: Routes = [
   {path: 'list', component: ListComponent},
   {path: 'temporal-list', component: TemporalListComponent},
   {path: 'mini-gallery', component: MiniGalleryComponent},
+  {path: 'som-overview', component: SomComponent},
+  {path: 'som-cluster', component: ClusterComponent},
   {path: '', component: MiniGalleryComponent}
 ];
 

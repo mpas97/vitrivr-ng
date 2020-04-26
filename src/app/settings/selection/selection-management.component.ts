@@ -3,6 +3,7 @@ import {SelectionService} from '../../core/selection/selection.service';
 import {Observable} from 'rxjs';
 import {Tag} from '../../core/selection/tag.model';
 import {QueryService} from '../../core/queries/query.service';
+import { Router } from '@angular/router';
 
 @Component({
 
@@ -21,7 +22,7 @@ export class SelectionManagementComponent {
    * @param _selectionService Reference to SelectionService (by injection).
    * @param _queryService Reference to QueryService (by injection).
    */
-  constructor(private _selectionService: SelectionService, private _queryService: QueryService) {
+  constructor(private _selectionService: SelectionService, private _queryService: QueryService, private _router: Router) {
     this._observable = _selectionService.asObservable();
   }
 
@@ -58,5 +59,17 @@ export class SelectionManagementComponent {
    */
   public onClearSelectionClicked() {
     this._selectionService.clear();
+  }
+
+  public onUpdateSomSelectionClicked() {
+    let pos = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[2])).map(s => s[0]);
+    let neg = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[4])).map(s => s[0]);
+    this._queryService.updateSOM(pos, neg);
+  }
+
+  public onGetSomClustersClicked() {
+    let cids = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[0])).map(s => s[0]);
+    this._queryService.getSomClusters(cids);
+    this._router.navigateByUrl('som-cluster');
   }
 }

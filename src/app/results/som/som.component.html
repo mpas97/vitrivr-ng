@@ -1,0 +1,12 @@
+<p *ngIf="!(dataSource | async) && !loading" class="background-prompt">No SOM available. Please train one...
+</p>
+    
+<p *ngIf="!(dataSource | async) && loading" class="background-prompt">
+    <mat-spinner></mat-spinner>
+</p>
+<div [ngStyle]="{'grid-template-columns': xDim(),'grid-template-rows': yDim()}" (scrolled)="incrementCount()" (scrolledUp)="decrementCount()" [fromRoot]="true" [infiniteScrollContainer]="'#scrollable'"
+    [infiniteScrollDistance]="1" [infiniteScrollUpDistance]="2" class="mini-gallery"
+    infiniteScroll>
+<som-result-segment-preview-tile *ngFor="let segment of (dataSource | async)"
+    [container]="this" [score]="1" [segment]="segment"></som-result-segment-preview-tile>
+</div>
