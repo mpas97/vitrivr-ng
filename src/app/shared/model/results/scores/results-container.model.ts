@@ -30,7 +30,6 @@ import {FilterType} from '../../../../settings/refinement/filtertype.model';
 import {TemporalFusionFunction} from '../fusion/temporal-fusion-function.model';
 import {AverageFusionFunction} from '../fusion/average-fusion-function.model';
 import {MaxpoolFusionFunction} from '../fusion/maxpool-fusion-function.model';
-import { SomClusterQueryResult } from '../../messages/interfaces/responses/query-result-som-cluster.interface';
 
 export class ResultsContainer {
   /** A Map that maps objectId's to their MediaObjectScoreContainer. This is where the results of a query are assembled. */
@@ -479,11 +478,7 @@ export class ResultsContainer {
     return true;
   }
 
-  public processSomClusterMessage(som: SomClusterQueryResult) {
-    if (som.queryId !== this.queryId) {
-      console.warn(`som train result query id ${som.queryId} does not match query id ${this.queryId}`);
-      return false;
-    }
+  public clearClusterView() {
     this._results_som_cluster_segments = [];
     this.next();
     return true;

@@ -30,7 +30,6 @@ import {StagedSimilarityQuery} from '../../shared/model/messages/queries/staged-
 import {TemporalQuery} from '../../shared/model/messages/queries/temporal-query.model';
 import {SomTrainQuery} from 'app/shared/model/messages/queries/som-train-query.model';
 import {SomUpdateQuery} from 'app/shared/model/messages/queries/som-update-query.model';
-import {SomClusterQueryResult} from 'app/shared/model/messages/interfaces/responses/query-result-som-cluster.interface';
 import {SomClusterQuery} from 'app/shared/model/messages/queries/som-cluster.interface';
 
 /**
@@ -71,7 +70,7 @@ export class QueryService {
     _factory.asObservable().pipe(filter(ws => ws != null)).subscribe(ws => {
       this._socket = ws;
       this._socket.pipe(
-        filter(msg => ['QR_START', 'QR_END', 'QR_ERROR', 'QR_SIMILARITY', 'QR_OBJECT', 'QR_SEGMENT', 'QR_METADATA_S', 'QR_METADATA_O', 'QR_SOM_CLUSTER'].indexOf(msg.messageType) > -1)
+        filter(msg => ['QR_START', 'QR_END', 'QR_ERROR', 'QR_SIMILARITY', 'QR_OBJECT', 'QR_SEGMENT', 'QR_METADATA_S', 'QR_METADATA_O'].indexOf(msg.messageType) > -1)
       ).subscribe((msg: Message) => this.onApiMessage(msg));
     });
     this._config.subscribe(config => {
@@ -247,6 +246,7 @@ export class QueryService {
   }
 
   public getSomClusters(cids: string[]) {
+    this._results.clearClusterView();
     this._socket.next(new SomClusterQuery(cids, new ReadableQueryConfig(this.results.queryId)));
     return true;
   }
@@ -321,12 +321,6 @@ export class QueryService {
       case 'QR_SIMILARITY':
         const sim = <SimilarityQueryResult>message;
         if (this._results && this._results.processSimilarityMessage(sim)) {
-          this._subject.next('UPDATED');
-        }
-        break;
-      case 'QR_SOM_CLUSTER':
-        const sci = <SomClusterQueryResult>message;
-        if (this._results && this._results.processSomClusterMessage(sci)) {
           this._subject.next('UPDATED');
         }
         break;
