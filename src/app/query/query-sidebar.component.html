@@ -3,6 +3,8 @@
   <div [style.margin-bottom]="'15px'">
     <input [style.margin-bottom]="'5px'" [style.width]="'20%'" [style.float]="'left'" placeholder="Grid size" (keyup)="onKey($event)">
     <select (change)="selectedRetriever($event.target.value)"><option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</option></select>
+    <mat-slider [style.width]="'80%'" [(ngModel)]="_queryService.deepness" max="100" min="1" step="1"
+    value="40" thumbLabel></mat-slider>
     <button (click)="onSomTrainClicked()" [color]="'accent'" mat-raised-button style="width:100%">
       <mat-icon>gradient</mat-icon>
       Train SOM

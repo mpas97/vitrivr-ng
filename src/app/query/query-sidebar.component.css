@@ -1,0 +1,17 @@
+:host /deep/ .mat-slider-thumb-label {
+transform: rotate(45deg) !important;
+border: none !important;
+top: -14px !important;
+}
+
+:host /deep/ .mat-slider:not(.mat-slider-disabled).cdk-focused .mat-slider-thumb-label {
+border-radius: 50% !important;
+}
+
+:host /deep/ .mat-slider-thumb {
+transform: scale(0) !important;
+}
+
+:host /deep/ .mat-slider-thumb-label-text {
+opacity: 1 !important;
+}

@@ -57,6 +57,7 @@ export class QueryService {
   private _scoreFunction: string;
   /** The size of the SOM */
   private _size: string;
+  private _deepness: string = '40';
 
   /** Results of a query. May be empty. */
   private _results: ResultsContainer;
@@ -108,6 +109,14 @@ export class QueryService {
 
   set size(s: string) {
     this._size = s;
+  }
+
+  get deepness(): string {
+    return this._deepness;
+  }
+
+  set deepness(d: string) {
+    this._deepness = d;
   }
 
   /**
@@ -247,7 +256,7 @@ export class QueryService {
   }
 
   public updateSOM(positives: string[], negatives: string[]) {
-    this._socket.next(new SomUpdateQuery(this.size, this.retriever_selection, positives, negatives, new ReadableQueryConfig(null)));
+    this._socket.next(new SomUpdateQuery(this.size, this.retriever_selection, this._deepness, positives, negatives, new ReadableQueryConfig(null)));
     return true;
   }
 

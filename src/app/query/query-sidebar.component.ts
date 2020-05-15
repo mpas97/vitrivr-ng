@@ -17,7 +17,8 @@ import {Router} from '@angular/router';
 @Component({
 
   selector: 'app-query-sidebar',
-  templateUrl: 'query-sidebar.component.html'
+  templateUrl: 'query-sidebar.component.html',
+  styleUrls: ['./query-sidebar.component.css']
 })
 export class QuerySidebarComponent implements OnInit {
   /** StagedQueryContainer's held by the current instance of ResearchComponent. */
