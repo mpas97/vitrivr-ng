@@ -106,6 +106,10 @@ export class QueryService {
     return this._size;
   }
 
+  set size(s: string) {
+    this._size = s;
+  }
+
   /**
    * Returns an Observable that allows an Observer to be notified about
    * state changes in the QueryService (RunningQueries, Finished, Resultset updated).
@@ -237,14 +241,13 @@ export class QueryService {
     return true;
   }
 
-  public trainSOM(size: string) {
-    this._size = size;
-    this._socket.next(new SomTrainQuery(this.retriever_selection, size));
+  public trainSOM() {
+    this._socket.next(new SomTrainQuery(this.retriever_selection, this._size));
     return true;
   }
 
   public updateSOM(positives: string[], negatives: string[]) {
-    this._socket.next(new SomUpdateQuery(this.retriever_selection, positives, negatives, new ReadableQueryConfig(null)));
+    this._socket.next(new SomUpdateQuery(this.size, this.retriever_selection, positives, negatives, new ReadableQueryConfig(null)));
     return true;
   }
 

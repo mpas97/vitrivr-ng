@@ -89,14 +89,12 @@ export class QuerySidebarComponent implements OnInit {
     ).subscribe(c => this._eventBus.publish(new InteractionEvent(...c)))
   }
 
-  private _size = '';
-
   onKey(event: any) { // without type info
-    this._size = event.target.value;
+    this._queryService.size = event.target.value;
   }
 
   public onSomTrainClicked() {
-    this._queryService.trainSOM(this._size);
+    this._queryService.trainSOM();
     this._router.navigateByUrl('som-overview');
   }
 
