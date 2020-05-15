@@ -360,10 +360,11 @@ export class QueryService {
   private retrievers : string[] = [];
   public retriever_observable = new BehaviorSubject<string[]>(this.retrievers);
 
-  public retriever_selection : string = "";
+  public retriever_selection : string = null;
 
   public processRetrieverMessage(retriever: RetrieverQueryResult) {
-    this.retrievers = retriever.content;
+    this.retrievers = retriever.content.sort();
+    if (!this.retriever_selection) this.retriever_selection = this.retrievers[0];
     this.retriever_observable.next(this.retrievers);
   }
 

@@ -1,7 +1,7 @@
 <div style="text-align:center;">
 
   <div [style.margin-bottom]="'15px'">
-    <input [style.margin-bottom]="'5px'" placeholder="SOM grid size" (keyup)="onKey($event)">
+    <input [style.margin-bottom]="'5px'" [style.width]="'20%'" [style.float]="'left'" placeholder="Grid size" (keyup)="onKey($event)">
     <select (change)="selectedRetriever($event.target.value)"><option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</option></select>
     <button (click)="onSomTrainClicked()" [color]="'accent'" mat-raised-button style="width:100%">
       <mat-icon>gradient</mat-icon>
