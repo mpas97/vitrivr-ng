@@ -20,4 +20,6 @@ export type MessageType =
     | 'M_LOOKUP'
     | 'Q_SOM_TRAIN'
     | 'Q_SOM_UPDATE'
-    | 'Q_SOM_CLUSTER';
+    | 'Q_SOM_CLUSTER'
+    | 'Q_RETRIEVER'
+    | 'QR_RETRIEVER';

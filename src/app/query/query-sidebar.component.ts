@@ -34,6 +34,7 @@ export class QuerySidebarComponent implements OnInit {
    */
   public ngOnInit() {
     this.addQueryTermContainer();
+    this._queryService.retrieversAsObservable.subscribe(x => this.retrievers = x);
   }
 
   /**
@@ -97,6 +98,11 @@ export class QuerySidebarComponent implements OnInit {
   public onSomTrainClicked() {
     this._queryService.trainSOM(this._size);
     this._router.navigateByUrl('som-overview');
+  }
+
+  public retrievers = [];
+  public selectedRetriever(retriver : string) {
+    this._queryService.retriever_selection = retriver;
   }
 
   /**

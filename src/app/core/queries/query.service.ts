@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, BehaviorSubject} from 'rxjs';
 
 import {Message} from '../../shared/model/messages/interfaces/message.interface';
 import {QueryStart} from '../../shared/model/messages/interfaces/responses/query-start.interface';
@@ -31,6 +31,8 @@ import {TemporalQuery} from '../../shared/model/messages/queries/temporal-query.
 import {SomTrainQuery} from 'app/shared/model/messages/queries/som-train-query.model';
 import {SomUpdateQuery} from 'app/shared/model/messages/queries/som-update-query.model';
 import {SomClusterQuery} from 'app/shared/model/messages/queries/som-cluster.interface';
+import { RetrieverQuery } from 'app/shared/model/messages/queries/retriever-query.model';
+import { RetrieverQueryResult } from 'app/shared/model/messages/interfaces/responses/query-retrievers.interface';
 
 /**
  *  Types of changes that can be emitted from the QueryService.
@@ -70,7 +72,7 @@ export class QueryService {
     _factory.asObservable().pipe(filter(ws => ws != null)).subscribe(ws => {
       this._socket = ws;
       this._socket.pipe(
-        filter(msg => ['QR_START', 'QR_END', 'QR_ERROR', 'QR_SIMILARITY', 'QR_OBJECT', 'QR_SEGMENT', 'QR_METADATA_S', 'QR_METADATA_O'].indexOf(msg.messageType) > -1)
+        filter(msg => ['QR_START', 'QR_END', 'QR_ERROR', 'QR_SIMILARITY', 'QR_OBJECT', 'QR_SEGMENT', 'QR_METADATA_S', 'QR_METADATA_O', 'QR_RETRIEVER'].indexOf(msg.messageType) > -1)
       ).subscribe((msg: Message) => this.onApiMessage(msg));
     });
     this._config.subscribe(config => {
@@ -79,6 +81,7 @@ export class QueryService {
         this._results.setScoreFunction(this._scoreFunction);
       }
     })
+    this._socket.next(new RetrieverQuery());
   }
 
   /**
@@ -236,12 +239,12 @@ export class QueryService {
 
   public trainSOM(size: string) {
     this._size = size;
-    this._socket.next(new SomTrainQuery(size));
+    this._socket.next(new SomTrainQuery(this.retriever_selection, size));
     return true;
   }
 
   public updateSOM(positives: string[], negatives: string[]) {
-    this._socket.next(new SomUpdateQuery(this.size, positives, negatives, new ReadableQueryConfig(null)));
+    this._socket.next(new SomUpdateQuery(this.retriever_selection, positives, negatives, new ReadableQueryConfig(null)));
     return true;
   }
 
@@ -336,6 +339,10 @@ export class QueryService {
           this._subject.next('UPDATED');
         }
         break;
+      case 'QR_RETRIEVER':
+        const retr = <RetrieverQueryResult>message;
+        this.processRetrieverMessage(retr);
+        break;
       case 'QR_ERROR':
         console.timeEnd(`Query (${(<QueryError>message).queryId})`);
         this.errorOccurred(<QueryError>message);
@@ -345,6 +352,20 @@ export class QueryService {
         this.finalizeQuery((<QueryError>message).queryId);
         break;
     }
+  }
+
+  private retrievers : string[] = [];
+  public retriever_observable = new BehaviorSubject<string[]>(this.retrievers);
+
+  public retriever_selection : string = "";
+
+  public processRetrieverMessage(retriever: RetrieverQueryResult) {
+    this.retrievers = retriever.content;
+    this.retriever_observable.next(this.retrievers);
+  }
+
+  get retrieversAsObservable(): Observable<String[]> {
+    return this.retriever_observable.asObservable();
   }
 
   /**
