@@ -17,8 +17,7 @@ import {Router} from '@angular/router';
 @Component({
 
   selector: 'app-query-sidebar',
-  templateUrl: 'query-sidebar.component.html',
-  styleUrls: ['./query-sidebar.component.css']
+  templateUrl: 'query-sidebar.component.html'
 })
 export class QuerySidebarComponent implements OnInit {
   /** StagedQueryContainer's held by the current instance of ResearchComponent. */
@@ -35,7 +34,6 @@ export class QuerySidebarComponent implements OnInit {
    */
   public ngOnInit() {
     this.addQueryTermContainer();
-    this._queryService.retrieversAsObservable.subscribe(x => this.retrievers = x);
   }
 
   /**
@@ -88,20 +86,6 @@ export class QuerySidebarComponent implements OnInit {
       }),
       bufferCount(Number.MIN_SAFE_INTEGER)
     ).subscribe(c => this._eventBus.publish(new InteractionEvent(...c)))
-  }
-
-  onKey(event: any) { // without type info
-    this._queryService.size = event.target.value;
-  }
-
-  public onSomTrainClicked() {
-    this._queryService.trainSOM();
-    this._router.navigateByUrl('som-overview');
-  }
-
-  public retrievers = [];
-  public selectedRetriever(retriver : string) {
-    this._queryService.retriever_selection = retriver;
   }
 
   /**

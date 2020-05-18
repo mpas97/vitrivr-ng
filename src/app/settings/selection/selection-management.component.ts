@@ -61,16 +61,11 @@ export class SelectionManagementComponent {
     this._selectionService.clear();
   }
 
-  public onUpdateSomSelectionClicked() {
-    let pos = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[2])).map(s => s[0]);
-    let neg = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[4])).map(s => s[0]);
-    this._queryService.updateSOM(pos, neg);
-    this._router.navigateByUrl('som-overview');
-  }
-
   public onGetSomClustersClicked() {
     let cids = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[0])).map(s => s[0]);
-    this._queryService.getSomClusters(cids);
-    this._router.navigateByUrl('som-cluster');
+    if (cids.length > 0) {
+      this._queryService.getSomClusters(cids);
+      this._router.navigateByUrl('som-cluster');
+    }
   }
 }

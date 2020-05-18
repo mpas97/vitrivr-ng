@@ -5,6 +5,9 @@ grid-template-rows: repeat(auto-fill, 100px);
 grid-auto-flow: row;
 grid-row-gap: 5px;
 grid-column-gap: 5px;
+padding: 8px;
+align-self: center;
+margin-top: 48px;
 }
 
 .segment {

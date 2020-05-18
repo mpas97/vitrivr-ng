@@ -1,0 +1,13 @@
+<div style="background-color:#607D8B;height: 48px;margin: 0 8px;position: fixed;left: 0;right: 0;z-index: 200;">
+    <div style="display: flex;align-items: center;justify-content: space-evenly;position: fixed;left: 300px;right: 300px;">
+    <div><span style="color:white;margin-right: 10px;">Grid size:</span>
+    <input type="number" [style.width]="'35px'" (keyup)="onKey($event)" value="{{_queryService.size}}">
+    </div>
+    <select [(ngModel)]="_queryService.retriever_selection"><option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</option></select>
+    <select [disabled]="_queryService.mode_manual" [(ngModel)]="_queryService.mode_selection"><option *ngFor="let mode of _queryService.query_mode" [value]="mode">{{mode}}</option></select>
+    <label style="color:white;"><input type="checkbox" [disabled]="_queryService.isOverview()" [(ngModel)]="_queryService.mode_manual" />manual range</label>
+    <mat-slider [disabled]="(!_queryService.mode_manual||_queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="_queryService.deepness" max="100" min="1" step="1"
+    value="40" thumbLabel></mat-slider>
+    <button (click)="onSomTrainClicked()" color="primary" mat-raised-button><mat-icon>gradient</mat-icon> Train SOM</button>
+    </div>
+</div>

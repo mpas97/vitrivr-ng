@@ -27,7 +27,7 @@ const appRoutes: Routes = [
   {path: 'mini-gallery', component: MiniGalleryComponent},
   {path: 'som-overview', component: SomComponent},
   {path: 'som-cluster', component: ClusterComponent},
-  {path: '', component: MiniGalleryComponent}
+  {path: '', component: SomComponent}
 ];
 
 @NgModule({

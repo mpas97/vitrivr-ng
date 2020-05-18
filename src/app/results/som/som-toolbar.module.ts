@@ -8,14 +8,12 @@ import {ContainerPipesModule} from '../../shared/pipes/containers/container-pipe
 import {VbsModule} from '../../core/vbs/vbs.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {VgCoreModule} from 'videogular2/core';
-import {ClusterComponent} from './cluster.component';
-import {SomResultSegmentPreviewTileModule} from '../som-result-segment-preview-tile/som-result-segment-preview-tile.module';
-import {SomToolbarModule} from './som-toolbar.module';
+import { SomToolbarComponent } from './som-toolbar.component';
 
 @NgModule({
-  imports: [MaterialModule, BrowserModule, FormsModule, AppRoutingModule, FlexLayoutModule, ContainerPipesModule, VbsModule, InfiniteScrollModule, VgCoreModule, SomResultSegmentPreviewTileModule, SomToolbarModule],
-  declarations: [ClusterComponent],
-  exports: [ClusterComponent]
+  imports: [MaterialModule, BrowserModule, FormsModule, AppRoutingModule, FlexLayoutModule, ContainerPipesModule, VbsModule, InfiniteScrollModule, VgCoreModule],
+  declarations: [SomToolbarComponent],
+  exports: [SomToolbarComponent]
 })
-export class ClusterModule {
+export class SomToolbarModule {
 }

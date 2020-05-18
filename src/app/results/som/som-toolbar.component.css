@@ -15,3 +15,12 @@ transform: scale(0) !important;
 :host /deep/ .mat-slider-thumb-label-text {
 opacity: 1 !important;
 }
+
+:host /deep/ .mat-slider-disabled .mat-slider-thumb-label {
+    display: flex !important;
+    background-color: #3b3b3d;
+}
+
+:host /deep/ .mat-slider-disabled .mat-slider-thumb-label-text {
+    color: gray;
+}

@@ -6,7 +6,6 @@ import {QueryStart} from '../../shared/model/messages/interfaces/responses/query
 import {SegmentQueryResult} from '../../shared/model/messages/interfaces/responses/query-result-segment.interface';
 import {SimilarityQueryResult} from '../../shared/model/messages/interfaces/responses/query-result-similarty.interface';
 import {ObjectQueryResult} from '../../shared/model/messages/interfaces/responses/query-result-object.interface';
-import {SimilarityQuery} from '../../shared/model/messages/queries/similarity-query.model';
 import {MoreLikeThisQuery} from '../../shared/model/messages/queries/more-like-this-query.model';
 import {QueryError} from '../../shared/model/messages/interfaces/responses/query-error.interface';
 import {ResultsContainer} from '../../shared/model/results/scores/results-container.model';
@@ -29,10 +28,10 @@ import {TemporalFusionFunction} from '../../shared/model/results/fusion/temporal
 import {StagedSimilarityQuery} from '../../shared/model/messages/queries/staged-similarity-query.model';
 import {TemporalQuery} from '../../shared/model/messages/queries/temporal-query.model';
 import {SomTrainQuery} from 'app/shared/model/messages/queries/som-train-query.model';
-import {SomUpdateQuery} from 'app/shared/model/messages/queries/som-update-query.model';
 import {SomClusterQuery} from 'app/shared/model/messages/queries/som-cluster.interface';
-import { RetrieverQuery } from 'app/shared/model/messages/queries/retriever-query.model';
-import { RetrieverQueryResult } from 'app/shared/model/messages/interfaces/responses/query-retrievers.interface';
+import {RetrieverQuery} from 'app/shared/model/messages/queries/retriever-query.model';
+import {RetrieverQueryResult} from 'app/shared/model/messages/interfaces/responses/query-retrievers.interface';
+import {SelectionService} from '../selection/selection.service';
 
 /**
  *  Types of changes that can be emitted from the QueryService.
@@ -56,8 +55,8 @@ export class QueryService {
   private _socket: WebSocketSubject<Message>;
   private _scoreFunction: string;
   /** The size of the SOM */
-  private _size: string;
-  private _deepness: string = '40';
+  private _size: number = 5;
+  private _deepness: number = 40;
 
   /** Results of a query. May be empty. */
   private _results: ResultsContainer;
@@ -69,7 +68,8 @@ export class QueryService {
 
   constructor(@Inject(HistoryService) private _history,
               @Inject(WebSocketFactoryService) _factory: WebSocketFactoryService,
-              @Inject(ConfigService) private _config: ConfigService) {
+              @Inject(ConfigService) private _config: ConfigService,
+              @Inject(SelectionService) private _selectionService: SelectionService) {
     _factory.asObservable().pipe(filter(ws => ws != null)).subscribe(ws => {
       this._socket = ws;
       this._socket.pipe(
@@ -103,20 +103,24 @@ export class QueryService {
     return this._results;
   }
 
-  get size(): string {
+  get size(): number {
     return this._size;
   }
 
-  set size(s: string) {
-    this._size = s;
+  set size(s: number) {
+    if (s > 0) {
+      this._size = s;
+    }
   }
 
-  get deepness(): string {
+  get deepness(): number {
     return this._deepness;
   }
 
-  set deepness(d: string) {
-    this._deepness = d;
+  set deepness(d: number) {
+    if (d > 0 && d <= 100) {
+      this._deepness = d;
+    }
   }
 
   /**
@@ -250,22 +254,6 @@ export class QueryService {
     return true;
   }
 
-  public trainSOM() {
-    this._socket.next(new SomTrainQuery(this.retriever_selection, this._size));
-    return true;
-  }
-
-  public updateSOM(positives: string[], negatives: string[]) {
-    this._socket.next(new SomUpdateQuery(this.size, this.retriever_selection, this._deepness, positives, negatives, new ReadableQueryConfig(null)));
-    return true;
-  }
-
-  public getSomClusters(cids: string[]) {
-    this._results.clearClusterView();
-    this._socket.next(new SomClusterQuery(cids, new ReadableQueryConfig(this.results.queryId)));
-    return true;
-  }
-
   /**
    * Loads a HistoryContainer and replaces the current snapshot.
    *
@@ -367,18 +355,63 @@ export class QueryService {
   }
 
   private retrievers : string[] = [];
-  public retriever_observable = new BehaviorSubject<string[]>(this.retrievers);
+  private retriever_observable = new BehaviorSubject<string[]>(this.retrievers);
+  
+  get retrieversAsObservable(): Observable<String[]> {
+    return this.retriever_observable.asObservable();
+  }
+
+  public query_mode = ["query close","query near","explore little","explore wide","overview"];
+
+  public isOverview() {
+    return "overview" == this.mode_selection;
+  }
 
   public retriever_selection : string = null;
+  public mode_selection : string = this.query_mode[4];
+  public mode_manual : boolean = false;
 
   public processRetrieverMessage(retriever: RetrieverQueryResult) {
     this.retrievers = retriever.content.sort();
     if (!this.retriever_selection) this.retriever_selection = this.retrievers[0];
     this.retriever_observable.next(this.retrievers);
+    this._results.complete();
+    this._subject.next('CLEAR');
   }
 
-  get retrieversAsObservable(): Observable<String[]> {
-    return this.retriever_observable.asObservable();
+  public trainSOM() {
+    let positives = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[2])).map(s => s[0]);
+    let negatives = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[4])).map(s => s[0]);
+    var range = this._deepness;
+    if (!this.mode_manual) {
+      switch (this.mode_selection) {
+        case this.query_mode[0]:
+          range = Math.min(positives.length, 6);
+          break;
+        case this.query_mode[1]:
+          range = Math.min(2 * positives.length, 14);
+          break;
+        case this.query_mode[2]:
+          range = Math.max(5 * positives.length, 20);
+          break;
+        case this.query_mode[3]:
+          range = Math.max(10 * positives.length, 40);
+            break;
+        case this.query_mode[4]:
+          range = -1;
+          break;
+      }
+    }
+    if (range === -1 || positives.length > 0) {
+      this._socket.next(new SomTrainQuery(this.size, this.retriever_selection, range, positives, negatives, new ReadableQueryConfig(null)));
+    }
+    return true;
+  }
+
+  public getSomClusters(cids: string[]) {
+    this._results.clearClusterView();
+    this._socket.next(new SomClusterQuery(cids, new ReadableQueryConfig(this.results.queryId)));
+    return true;
   }
 
   /**

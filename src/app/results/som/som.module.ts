@@ -9,10 +9,11 @@ import {ContainerPipesModule} from '../../shared/pipes/containers/container-pipe
 import {VbsModule} from '../../core/vbs/vbs.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {VgCoreModule} from 'videogular2/core';
-import { SomResultSegmentPreviewTileModule } from '../som-result-segment-preview-tile/som-result-segment-preview-tile.module';
+import {SomResultSegmentPreviewTileModule} from '../som-result-segment-preview-tile/som-result-segment-preview-tile.module';
+import {SomToolbarModule} from './som-toolbar.module';
 
 @NgModule({
-  imports: [MaterialModule, BrowserModule, FormsModule, AppRoutingModule, FlexLayoutModule, ContainerPipesModule, VbsModule, InfiniteScrollModule, VgCoreModule, SomResultSegmentPreviewTileModule],
+  imports: [MaterialModule, BrowserModule, FormsModule, AppRoutingModule, FlexLayoutModule, ContainerPipesModule, VbsModule, InfiniteScrollModule, VgCoreModule, SomResultSegmentPreviewTileModule, SomToolbarModule],
   declarations: [SomComponent],
   exports: [SomComponent]
 })
