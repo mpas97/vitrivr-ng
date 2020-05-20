@@ -24,3 +24,38 @@ opacity: 1 !important;
 :host /deep/ .mat-slider-disabled .mat-slider-thumb-label-text {
     color: gray;
 }
+
+:host /deep/ .mat-select-arrow {
+color: white;
+}
+
+:host /deep/ .mat-form-field-appearance-legacy .mat-form-field-underline {
+background-color: white;
+}
+
+:host /deep/ .mat-select-value {
+color: white;
+}
+
+:host /deep/ mat-label {
+color: white;
+}
+
+:host /deep/ .mat-input-element {
+color: white;
+}
+
+:host /deep/ .mat-form-field {
+padding-top: 6px;
+}
+
+:host /deep/ .mat-checkbox-label {
+color: white;
+}
+
+:host /deep/ .mat-checkbox-frame {
+border-color: white;
+}
+:host /deep/ .mat-select-disabled .mat-select-value-text {
+color: rgba(0, 0, 0, 0.38);
+}
