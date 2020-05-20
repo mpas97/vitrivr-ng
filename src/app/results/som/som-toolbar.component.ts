@@ -40,6 +40,14 @@ export class SomToolbarComponent implements OnInit {
     if (event.keyCode == 78) {
       this._queryService.mode_selection = this._queryService.query_mode[1];
     }
+    /** L will set som deepness to exploration little. */
+    if (event.keyCode == 76) {
+      this._queryService.mode_selection = this._queryService.query_mode[2];
+    }
+    /** W will set som deepness to exploration wide. */
+    if (event.keyCode == 87) {
+      this._queryService.mode_selection = this._queryService.query_mode[3];
+    }
     /** O will set som deepness to overview. */
     if (event.keyCode == 79) {
       this._queryService.mode_selection = this._queryService.query_mode[4];
@@ -48,13 +56,17 @@ export class SomToolbarComponent implements OnInit {
     if (event.keyCode == 84) {
       this._queryService.trainSOM();
     }
-    /** 5 will set the som size to 5. */
-    if (event.keyCode == 53) {
+    /** S will set som size to 5. */
+    if (event.keyCode == 83) {
       this._queryService.size = 5;
     }
-    /** 5 will set the som size to 8. */
-    if (event.keyCode == 56) {
-      this._queryService.size = 8;
+    /** D will set som size to 10. */
+    if (event.keyCode == 68) {
+      this._queryService.size = 10;
+    }
+    /** X will set som size to 20. */
+    if (event.keyCode == 88) {
+      this._queryService.size = 20;
     }
     /** + will increase the som size by 5. */
     if (event.keyCode == 49) {
@@ -87,6 +99,10 @@ export class SomToolbarComponent implements OnInit {
     /** right key will increase deepness. */
     if (event.keyCode == 39) {
       if (this._queryService.mode_manual) this._queryService.deepness++;
+    }
+    /** C will clear relevance feedback. */
+    if (event.keyCode == 67) {
+      this._queryService.clearFeedback();
     }
   }
 
