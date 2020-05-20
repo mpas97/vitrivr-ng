@@ -114,6 +114,10 @@ export class ResultsContainer {
     return this._features;
   }
 
+  public getSegment(id: string): SegmentScoreContainer {
+    return this._segmentid_to_segment_map.get(id);
+  }
+
   /**
    * Map of all MediaTypes that have been returned by the current query. Empty map indicates, that no
    * results have been returned yet OR that no query is running.

@@ -380,8 +380,8 @@ export class QueryService {
   }
 
   public trainSOM() {
-    let positives = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[2])).map(s => s[0]);
-    let negatives = Array.from(this._selectionService.value).filter(s => s[1].has(this._selectionService.availableTags[4])).map(s => s[0]);
+    let positives = Array.from(this.feedback).filter(([_,tag]) => tag).map(([id]) => id);
+    let negatives = Array.from(this.feedback).filter(([_,tag]) => !tag).map(([id]) => id);
     var range = this._deepness;
     if (!this.mode_manual) {
       switch (this.mode_selection) {
@@ -412,6 +412,40 @@ export class QueryService {
     this._results.clearClusterView();
     this._socket.next(new SomClusterQuery(cids, new ReadableQueryConfig(this.results.queryId)));
     return true;
+  }
+
+  private feedback: Map<string, boolean> = new Map();
+  private feedback_segments: SegmentScoreContainer[] = [];
+
+  get feedbackSegments(): SegmentScoreContainer[] {
+    return this.feedback_segments;
+  }
+
+  public setFeedback(elem: string, feedback: boolean) {
+    if (this.hasFeedbackActive(elem, feedback)) {
+      this.feedback.delete(elem);
+      this.feedback_segments = this.feedback_segments.filter(el => el.segmentId !== elem);
+    } else {
+      if (!this.hasFeedback(elem)) this.feedback_segments.push(this._results.getSegment(elem));
+      this.feedback.set(elem, feedback);
+    }
+  }
+
+  public clearFeedback() {
+    this.feedback = new Map();
+    this.feedback_segments = [];
+  }
+
+  public getFeedbackColor(elem: string, wish: boolean) : string {
+    return this.hasFeedbackActive(elem, wish) ? (wish ? 'lightgreen' : 'lightpink') : 'rgba(0, 0, 0, 0.7)';
+  }
+
+  public hasFeedbackActive(elem: string, wish: boolean) : boolean {
+    return this.feedback.has(elem) && this.feedback.get(elem) === wish;
+  }
+
+  public hasFeedback(elem: string) : boolean {
+    return this.feedback.has(elem);
   }
 
   /**

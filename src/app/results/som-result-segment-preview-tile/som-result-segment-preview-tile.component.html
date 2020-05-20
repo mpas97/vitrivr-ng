@@ -22,6 +22,21 @@
     </button>
   </div>
 
+  <div *ngIf="!inFocus && _queryService.hasFeedback(segment.segmentId)"  style="display: flex;justify-content: end;">
+    <mat-icon *ngIf="_queryService.hasFeedbackActive(segment.segmentId, false)" style="color:red;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_down</mat-icon>
+    <mat-icon *ngIf="_queryService.hasFeedbackActive(segment.segmentId, true)" style="color:green;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_up</mat-icon>
+  </div>
+
+  <div *ngIf="inFocus" style="position: relative;top: 32px;height: 35px;display: flex;justify-content: space-between;">
+    <button (click)="_queryService.setFeedback(segment.segmentId, false)" [ngStyle]="{'background-color': _queryService.getFeedbackColor(segment.segmentId, false)}" style="display: flex;justify-content: center;align-items: center;border: 3px solid red;padding: 0;cursor:pointer;width: 35px;">
+      <mat-icon style="color: red;">thumb_down</mat-icon>
+    </button>
+    <button (click)="onTileClicked($event)" style="padding: 0;cursor:pointer;background: none;display: flex;flex-grow: 1;border:0;"></button>
+    <button (click)="_queryService.setFeedback(segment.segmentId, true)" [ngStyle]="{'background-color': _queryService.getFeedbackColor(segment.segmentId, true)}" style="display: flex;justify-content: center;align-items: center;border: 3px solid green;padding: 0;cursor:pointer;width: 35px;">
+      <mat-icon style="color: green;">thumb_up</mat-icon>
+    </button>
+  </div>
+
   <div *ngIf="inFocus" class="footer" fxLayout="row" fxLayoutAlign="space-evenly">
     <button (click)="onSubmitButtonClicked()" *ngIf="(showVbsSubmitButton() | async)"
             mat-icon-button matTooltip="Submit segment to VBS">

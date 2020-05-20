@@ -5,9 +5,16 @@
 <p *ngIf="!(dataSource | async) && loading" class="background-prompt">
     <mat-spinner></mat-spinner>
 </p>
-<div (scrolled)="incrementCount()" (scrolledUp)="decrementCount()" [fromRoot]="true" [infiniteScrollContainer]="'#scrollable'"
+<div [ngStyle]="{'padding-bottom' : _queryService.feedbackSegments.length ? '135px' : '0'}"(scrolled)="incrementCount()" (scrolledUp)="decrementCount()" [fromRoot]="true" [infiniteScrollContainer]="'#scrollable'"
     [infiniteScrollDistance]="1" [infiniteScrollUpDistance]="2" class="mini-gallery"
     infiniteScroll>
 <som-result-segment-preview-tile *ngFor="let segment of (dataSource | async)"
     [container]="this" [score]="1" [segment]="segment"></som-result-segment-preview-tile>
+</div>
+
+<div *ngIf="_queryService.feedbackSegments.length" style="display:flex;background: gray;position: fixed;bottom: 0;left:0;width: 100%;border-top: 15px solid gray;z-index: 200;justify-content: center;">
+<div style="display:flex;overflow: scroll;max-width: calc(100% - 600px);">
+    <som-result-segment-preview-tile *ngFor="let segment of _queryService.feedbackSegments"
+    [container]="this" [score]="1" [segment]="segment"></som-result-segment-preview-tile>
+</div>
 </div>
