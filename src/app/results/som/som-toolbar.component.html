@@ -2,7 +2,7 @@
     <div style="position: fixed;left: 300px;right: 300px;overflow-x: scroll;display: grid;">
         <div style="display: flex;align-items: center;justify-content: space-evenly;max-width: 100%;padding: 0 8px;">
     <!--<div><span style="color:white;margin-right: 10px;">Grid size:</span>-->
-    <mat-form-field [style.width]="'40px'"><mat-label>Grid size</mat-label><input matInput type="number" (keyup)="onKey($event)" value="{{_queryService.size}}"></mat-form-field>
+    <mat-form-field [style.width]="'40px'"><mat-label>Grid size</mat-label><input matInput type="number" min="1" [(ngModel)]="_queryService.size"></mat-form-field>
     <!--</div>-->
     <mat-form-field><mat-label>Feature vectors</mat-label><mat-select [(ngModel)]="_queryService.retriever_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
     <mat-form-field><mat-label>Grid wideness</mat-label><mat-select [disabled]="_queryService.mode_manual" [(ngModel)]="_queryService.mode_selection"><mat-option *ngFor="let mode of _queryService.query_mode" [value]="mode">{{mode}}</mat-option></mat-select></mat-form-field>

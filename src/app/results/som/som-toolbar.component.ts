@@ -22,10 +22,6 @@ export class SomToolbarComponent implements OnInit {
     this._queryService.retrieversAsObservable.subscribe(x => this.retrievers = x);
   }
 
-  onKey(event: any) { // without type info
-    this._queryService.size = event.target.value;
-  }
-
   @HostListener('window:keyup', ['$event'])
   public keyEvent(event: KeyboardEvent) {
     /** Q will open the som overview. */
