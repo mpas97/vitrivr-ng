@@ -51,7 +51,11 @@
       <mat-icon>help</mat-icon>
     </button>
 
-    <button routerLink="/som-cluster" (click)="container._queryService.getSomClusters([segment.segmentId])" mat-icon-button matTooltip="Load cluster segments">
+    <button *ngIf="!overview" (click)="container.onMltButtonClicked(segment)" mat-icon-button matTooltip="More-like-this">
+      <mat-icon>youtube_searched_for</mat-icon>
+    </button>
+
+    <button *ngIf="overview" routerLink="/som-cluster" (click)="container._queryService.getSomClusters([segment.segmentId])" mat-icon-button matTooltip="Load cluster segments">
       <mat-icon>vertical_align_bottom</mat-icon>
     </button>
 

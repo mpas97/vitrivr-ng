@@ -58,6 +58,8 @@ export class SomResultSegmentPreviewTileComponent implements OnInit {
    * A flag whether this preview is in focus or not.
    */
   private _focus = false;
+  
+  @Input() overview: boolean;
 
   /**
    * Sets the flag, that this preview is in focus
