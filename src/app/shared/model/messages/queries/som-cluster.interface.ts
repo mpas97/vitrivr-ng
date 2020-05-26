@@ -5,6 +5,6 @@ import { SomCluterQueryMessage } from '../interfaces/requests/som-cluster-query.
 export class SomClusterQuery implements SomCluterQueryMessage {
   public readonly messageType: MessageType = 'Q_SOM_CLUSTER';
 
-  constructor(public readonly cids: string[], public readonly config: QueryConfig = null) {
+  constructor(public readonly cids: string[], public readonly offset: number, public readonly config: QueryConfig = null) {
   }
 }

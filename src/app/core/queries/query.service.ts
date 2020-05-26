@@ -404,13 +404,28 @@ export class QueryService {
     }
     if (range === -1 || positives.length > 0) {
       this._socket.next(new SomTrainQuery(this.size, this.retriever_selection, range, positives, negatives, new ReadableQueryConfig(null)));
+      this._cid = null;
     }
     return true;
   }
 
+  private _cid: string;
+  private _cid_offset: number = 0;
+
   public getSomClusters(cids: string[]) {
     this._results.clearClusterView();
-    this._socket.next(new SomClusterQuery(cids, new ReadableQueryConfig(this.results.queryId)));
+    this._cid = cids[0];
+    this._cid_offset = 0;
+    this._socket.next(new SomClusterQuery(cids, 0, new ReadableQueryConfig(this.results.queryId)));
+    return true;
+  }
+
+  public getCluster(offset: number) {
+    if (this._cid) {
+      this._results.clearClusterView();
+      this._cid_offset = this._cid_offset + offset;
+      this._socket.next(new SomClusterQuery([this._cid], this._cid_offset, new ReadableQueryConfig(this.results.queryId)));
+    }
     return true;
   }
 

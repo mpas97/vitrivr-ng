@@ -77,29 +77,25 @@ export class SomToolbarComponent implements OnInit {
     if (event.keyCode == 173) {
       this._queryService.size -= 5;
     }
-    /** up key will pick the privious retriever. */
-    if (event.keyCode == 38) {
-      const currentIndex = this.retrievers.indexOf(this._queryService.retriever_selection);
-      const nextIndex = currentIndex===0 ? this.retrievers.length-1 : currentIndex-1;
-      this._queryService.retriever_selection = this.retrievers[nextIndex];
-    }
-    /** down key will pick the next retriever. */
-    if (event.keyCode == 40) {
-      const currentIndex = this.retrievers.indexOf(this._queryService.retriever_selection);
-      const nextIndex = (currentIndex + 1) % this.retrievers.length;
-      this._queryService.retriever_selection = this.retrievers[nextIndex];
-    }
     /** M will swap manual mode. */
     if (event.keyCode == 77) {
       this._queryService.mode_manual = !this._queryService.mode_manual;
     }
-    /** left key will decrease deepness. */
+    /** left key will open previous cluster. */
     if (event.keyCode == 37) {
-      if (this._queryService.mode_manual) this._queryService.deepness--;
+      this._queryService.getCluster(-1);
     }
-    /** right key will increase deepness. */
+    /** right key will open next cluster. */
     if (event.keyCode == 39) {
-      if (this._queryService.mode_manual) this._queryService.deepness++;
+      this._queryService.getCluster(1);
+    }
+    /** up key will open cluster row above. */
+    if (event.keyCode == 38) {
+      this._queryService.getCluster(-this._queryService.size);
+    }
+    /** down key will open cluster row below. */
+    if (event.keyCode == 40) {
+      this._queryService.getCluster(this._queryService.size);
     }
     /** C will clear relevance feedback. */
     if (event.keyCode == 67) {
