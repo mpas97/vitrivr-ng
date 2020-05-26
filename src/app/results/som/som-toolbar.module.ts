@@ -8,12 +8,14 @@ import {ContainerPipesModule} from '../../shared/pipes/containers/container-pipe
 import {VbsModule} from '../../core/vbs/vbs.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {VgCoreModule} from 'videogular2/core';
-import { SomToolbarComponent } from './som-toolbar.component';
+import {SomToolbarComponent} from './som-toolbar.component';
+import {HelpDialogComponent} from './help-dialog.component';
 
 @NgModule({
   imports: [MaterialModule, BrowserModule, FormsModule, AppRoutingModule, FlexLayoutModule, ContainerPipesModule, VbsModule, InfiniteScrollModule, VgCoreModule],
-  declarations: [SomToolbarComponent],
-  exports: [SomToolbarComponent]
+  declarations: [SomToolbarComponent, HelpDialogComponent],
+  exports: [SomToolbarComponent, HelpDialogComponent],
+  entryComponents: [HelpDialogComponent]
 })
 export class SomToolbarModule {
 }

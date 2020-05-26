@@ -1,7 +1,8 @@
 import {Component, HostListener, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Router} from '@angular/router';
-import { QueryService } from 'app/core/queries/query.service';
-import { FilterService } from 'app/core/queries/filter.service';
+import {QueryService} from 'app/core/queries/query.service';
+import {MatDialog} from '@angular/material/dialog';
+import {HelpDialogComponent} from './help-dialog.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { FilterService } from 'app/core/queries/filter.service';
 })
 export class SomToolbarComponent implements OnInit {
     public retrievers = [];
-    constructor(private _queryService: QueryService, private _filterService: FilterService, private _router: Router) {
+    constructor(private _queryService: QueryService, private _dialog: MatDialog, private _router: Router) {
   }
 
   /**
@@ -50,7 +51,7 @@ export class SomToolbarComponent implements OnInit {
     }
     /** T will train a som. */
     if (event.keyCode == 84) {
-      this._queryService.trainSOM();
+      this.onSomTrainClicked();
     }
     /** S will set som size to 5. */
     if (event.keyCode == 83) {
@@ -105,6 +106,10 @@ export class SomToolbarComponent implements OnInit {
   public onSomTrainClicked() {
     this._queryService.trainSOM();
     this._router.navigateByUrl('som-overview');
+  }
+
+  public onHelpClicked() {
+    this._dialog.open(HelpDialogComponent);
   }
   
 }

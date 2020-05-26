@@ -10,5 +10,6 @@
     <mat-slider [disabled]="(!_queryService.mode_manual||_queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="_queryService.deepness" max="100" min="1" step="1"
     value="40" thumbLabel></mat-slider>
     <button (click)="onSomTrainClicked()" mat-raised-button><mat-icon>gradient</mat-icon> Train SOM</button>
+    <button (click)="onHelpClicked()" mat-raised-button><mat-icon>help</mat-icon></button>
     </div></div>
 </div>
