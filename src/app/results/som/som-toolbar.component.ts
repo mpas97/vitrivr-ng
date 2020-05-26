@@ -25,6 +25,10 @@ export class SomToolbarComponent implements OnInit {
 
   @HostListener('window:keyup', ['$event'])
   public keyEvent(event: KeyboardEvent) {
+    /** H will open the help dialog. */
+    if (event.keyCode == 72) {
+      this.onHelpClicked();
+    }
     /** Q will open the som overview. */
     if (event.keyCode == 81) {
       this._router.navigateByUrl('som-overview');
