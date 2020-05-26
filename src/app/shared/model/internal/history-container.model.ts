@@ -16,6 +16,12 @@ export class HistoryContainer {
   /** Number of segments in this HistoryContainer. */
   public readonly segments;
 
+  /** Number of segments in this HistoryContainer. */
+  public readonly cluster;
+
+  /** Number of segments in this HistoryContainer. */
+  public readonly overview;
+
   /** List of features used for this HistoryContainer. */
   public readonly features;
 
@@ -31,6 +37,8 @@ export class HistoryContainer {
     this.timestamp = Date.now();
     this.objects = results.objectCount;
     this.segments = results.segmentCount;
+    this.cluster = results.clusterCount;
+    this.overview = results.overviewCount;
     this.features = results.features.map(f => f.name);
     this.results = results.serialize();
   }

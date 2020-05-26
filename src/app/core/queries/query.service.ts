@@ -476,7 +476,7 @@ export class QueryService {
     this._results.doUpdate();
     this._running -= 1;
     this._subject.next('ENDED' as QueryChange);
-    if (this._results.segmentCount > 0) {
+    if (this._results.segmentCount > 0 || this._results.overviewCount > 0 || this._results.clusterCount > 0) {
       this._history.append(this._results);
     }
   }

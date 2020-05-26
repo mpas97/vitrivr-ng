@@ -150,6 +150,14 @@ export class ResultsContainer {
     return this._results_segments.length;
   }
 
+  get clusterCount(): number {
+    return this._results_som_cluster_segments.length;
+  }
+
+  get overviewCount(): number {
+    return this._results_som_overview_segments.length;
+  }
+  
   get mediaobjectsAsObservable(): Observable<MediaObjectScoreContainer[]> {
     return this._results_objects_subject.asObservable()
   }
@@ -178,7 +186,9 @@ export class ResultsContainer {
   public static deserialize(data: any): ResultsContainer {
     const container = new ResultsContainer(data['queryId']);
     container.processObjectMessage(<ObjectQueryResult>{queryId: container.queryId, content: <MediaObject[]>data['objects']});
-    container.processSegmentMessage(<SegmentQueryResult>{queryId: container.queryId, content: <MediaSegment[]>data['segments']});
+    container.processSegmentMessage(<SegmentQueryResult>{queryId: container.queryId, type: SEGMENT_TYPE.DEFAULT, content: <MediaSegment[]>data['segments']});
+    container.processSegmentMessage(<SegmentQueryResult>{queryId: container.queryId, type: SEGMENT_TYPE.SOM_CLUSTER, content: <MediaSegment[]>data['cluster']});
+    container.processSegmentMessage(<SegmentQueryResult>{queryId: container.queryId, type: SEGMENT_TYPE.SOM_OVERVIEW, content: <MediaSegment[]>data['overview']});
     container.processObjectMetadataMessage(<ObjectMetadataQueryResult>{
       queryId: container.queryId,
       content: <MediaObjectMetadata[]>data['objectMetadata']
@@ -533,6 +543,8 @@ export class ResultsContainer {
       queryId: this.queryId,
       objects: this._results_objects.map(obj => obj.serialize()),
       segments: this._results_segments.map(seg => seg.serialize()),
+      cluster: this._results_som_cluster_segments.map(seg => seg.serialize()),
+      overview: this._results_som_overview_segments.map(seg => seg.serialize()),
       objectMetadata: this.flatten(this._results_objects.map(obj => {
         const metadata: MediaObjectMetadata[] = [];
         obj.metadata.forEach((v, k) => {

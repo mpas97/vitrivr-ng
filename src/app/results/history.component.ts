@@ -22,7 +22,7 @@ import {QueryService} from '../core/queries/query.service';
       <a *ngFor="let result of (history|async)" mat-list-item (click)="load(result)">
         <mat-icon mat-list-icon>change_history</mat-icon>
         <span mat-line><strong>ID: {{result.id}}, {{format(result.timestamp)}}</strong></span>
-        <span mat-line>Objects: {{result.objects}}, Segments: {{result.segments}}</span>
+        <span mat-line>Objects: {{result.objects}}, Segments: {{result.segments}}, Overview: {{result.overview}}, Cluster: {{result.cluster}}</span>
         <span mat-line>Features: {{result.features.join(", ")}}</span>
       </a>
     </mat-nav-list>
