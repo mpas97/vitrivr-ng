@@ -23,6 +23,10 @@ export class SomToolbarComponent implements OnInit {
     this._queryService.retrieversAsObservable.subscribe(x => this.retrievers = x);
   }
 
+  get queryService(): QueryService{
+    return this._queryService;
+  }
+
   @HostListener('window:keyup', ['$event'])
   public keyEvent(event: KeyboardEvent) {
     /** H will open the help dialog. */

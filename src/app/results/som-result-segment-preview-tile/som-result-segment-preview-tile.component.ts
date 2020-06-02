@@ -83,6 +83,10 @@ export class SomResultSegmentPreviewTileComponent implements OnInit {
     return this._focus;
   }
 
+  get queryService(): QueryService{
+    return this._queryService;
+  }
+
   /**
    * Invokes when a user clicks the 'Find neighbouring segments' button.
    *

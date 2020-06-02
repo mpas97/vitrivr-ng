@@ -47,6 +47,10 @@ export class SomComponent extends AbstractSomSegmentResultsViewComponent<Segment
     yDim(): string {
         return 'repeat('+this._queryService.size+', 100px)';
     }
+
+    get queryService(): QueryService{
+        return this._queryService;
+    }
     
     /**
      * Subscribes to the data exposed by the ResultsContainer.

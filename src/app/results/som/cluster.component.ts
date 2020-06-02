@@ -39,6 +39,10 @@ export class ClusterComponent extends AbstractSomSegmentResultsViewComponent<Seg
     scrollIncrement(): number {
         return 500;
     }
+
+    get queryService(): QueryService{
+        return this._queryService;
+    }
     
     /**
      * Subscribes to the data exposed by the ResultsContainer.

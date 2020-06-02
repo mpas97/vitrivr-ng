@@ -2,15 +2,15 @@
     <div style="position: fixed;left: 300px;right: 300px;overflow-x: scroll;display: grid;">
         <div style="display: flex;align-items: center;justify-content: space-evenly;max-width: 100%;padding: 0 8px;">
     <!--<div><span style="color:white;margin-right: 10px;">Grid size:</span>-->
-    <mat-form-field [style.width]="'40px'"><mat-label>Grid size</mat-label><input matInput type="number" min="1" [(ngModel)]="_queryService.size"></mat-form-field>
+    <mat-form-field [style.width]="'40px'"><mat-label>Grid size</mat-label><input matInput type="number" min="1" [(ngModel)]="queryService.size"></mat-form-field>
     <!--</div>-->
-    <mat-form-field><mat-label>Feature vectors</mat-label><mat-select [(ngModel)]="_queryService.retriever_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
-    <mat-form-field><mat-label>Grid wideness</mat-label><mat-select [disabled]="_queryService.mode_manual" [(ngModel)]="_queryService.mode_selection"><mat-option *ngFor="let mode of _queryService.query_mode" [value]="mode">{{mode}}</mat-option></mat-select></mat-form-field>
-    <mat-checkbox [disabled]="_queryService.isOverview()" [(ngModel)]="_queryService.mode_manual">manual range</mat-checkbox>
-    <mat-slider [disabled]="(!_queryService.mode_manual||_queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="_queryService.deepness" max="100" min="1" step="1"
+    <mat-form-field><mat-label>Feature vectors</mat-label><mat-select [(ngModel)]="queryService.retriever_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
+    <mat-form-field><mat-label>Grid wideness</mat-label><mat-select [disabled]="queryService.mode_manual" [(ngModel)]="queryService.mode_selection"><mat-option *ngFor="let mode of queryService.query_mode" [value]="mode">{{mode}}</mat-option></mat-select></mat-form-field>
+    <mat-checkbox [disabled]="queryService.isOverview()" [(ngModel)]="queryService.mode_manual">manual range</mat-checkbox>
+    <mat-slider [disabled]="(!queryService.mode_manual||queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="queryService.deepness" max="100" min="1" step="1"
     value="40" thumbLabel></mat-slider>
-    <button *ngIf="_queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>gradient</mat-icon> Overview SOM</button>
-    <button [disabled]="_queryService.feedbackSegments.length==0" *ngIf="!_queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>thumbs_up_down</mat-icon> Feedback SOM</button>
+    <button *ngIf="queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>gradient</mat-icon> Overview SOM</button>
+    <button [disabled]="queryService.feedbackSegments.length==0" *ngIf="!queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>thumbs_up_down</mat-icon> Feedback SOM</button>
     <button (click)="onHelpClicked()" mat-raised-button><mat-icon>help</mat-icon></button>
     </div></div>
 </div>
