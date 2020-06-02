@@ -55,7 +55,9 @@ export class SomToolbarComponent implements OnInit {
     }
     /** O will set som deepness to overview. */
     if (event.keyCode == 79) {
-      this._queryService.mode_selection = this._queryService.query_mode[4];
+      if (!this._queryService.mode_manual) {
+        this._queryService.mode_selection = this._queryService.query_mode[4];
+      }
     }
     /** T will train a som. */
     if (event.keyCode == 84) {
@@ -83,7 +85,9 @@ export class SomToolbarComponent implements OnInit {
     }
     /** M will swap manual mode. */
     if (event.keyCode == 77) {
-      this._queryService.mode_manual = !this._queryService.mode_manual;
+      if (this._queryService.mode_selection !== this._queryService.query_mode[4]) {
+        this._queryService.mode_manual = !this._queryService.mode_manual;
+      }
     }
     /** left key will open previous cluster. */
     if (event.keyCode == 37) {
