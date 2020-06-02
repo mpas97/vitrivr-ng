@@ -9,7 +9,8 @@
     <mat-checkbox [disabled]="_queryService.isOverview()" [(ngModel)]="_queryService.mode_manual">manual range</mat-checkbox>
     <mat-slider [disabled]="(!_queryService.mode_manual||_queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="_queryService.deepness" max="100" min="1" step="1"
     value="40" thumbLabel></mat-slider>
-    <button (click)="onSomTrainClicked()" mat-raised-button><mat-icon>gradient</mat-icon> Train SOM</button>
+    <button *ngIf="_queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>gradient</mat-icon> Overview SOM</button>
+    <button [disabled]="_queryService.feedbackSegments.length==0" *ngIf="!_queryService.isOverview()" (click)="onSomTrainClicked()" mat-raised-button><mat-icon>thumbs_up_down</mat-icon> Feedback SOM</button>
     <button (click)="onHelpClicked()" mat-raised-button><mat-icon>help</mat-icon></button>
     </div></div>
 </div>
