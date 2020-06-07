@@ -47,6 +47,7 @@ color: white;
 
 :host /deep/ .mat-form-field {
 padding-top: 6px;
+width: 150px;
 }
 
 :host /deep/ .mat-checkbox-label {

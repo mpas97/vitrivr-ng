@@ -367,13 +367,15 @@ export class QueryService {
     return "overview" == this.mode_selection;
   }
 
-  public retriever_selection : string = null;
+  public retriever_knn_selection : string = null;
+  public retriever_som_selection : string = null;
   public mode_selection : string = this.query_mode[4];
   public mode_manual : boolean = false;
 
   public processRetrieverMessage(retriever: RetrieverQueryResult) {
     this.retrievers = retriever.content.sort();
-    if (!this.retriever_selection) this.retriever_selection = this.retrievers[0];
+    if (!this.retriever_knn_selection) this.retriever_knn_selection = this.retrievers[this.retrievers.length-1];
+    if (!this.retriever_som_selection) this.retriever_som_selection = this.retrievers[0];
     this.retriever_observable.next(this.retrievers);
     this._results.complete();
     this._subject.next('CLEAR');
@@ -403,7 +405,7 @@ export class QueryService {
       }
     }
     if (range === -1 || positives.length > 0) {
-      this._socket.next(new SomTrainQuery(this.size, this.retriever_selection, range, positives, negatives, new ReadableQueryConfig(null)));
+      this._socket.next(new SomTrainQuery(this.size, this.retriever_knn_selection, this.retriever_som_selection, range, positives, negatives, new ReadableQueryConfig(null)));
       this._cid = null;
     }
     return true;

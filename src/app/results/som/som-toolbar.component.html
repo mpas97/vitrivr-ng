@@ -4,7 +4,8 @@
     <!--<div><span style="color:white;margin-right: 10px;">Grid size:</span>-->
     <mat-form-field [style.width]="'40px'"><mat-label>Grid size</mat-label><input matInput type="number" min="1" [(ngModel)]="queryService.size"></mat-form-field>
     <!--</div>-->
-    <mat-form-field><mat-label>Feature vectors</mat-label><mat-select [(ngModel)]="queryService.retriever_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
+    <mat-form-field><mat-label>KNN vectors</mat-label><mat-select [disabled]="queryService.isOverview()" [(ngModel)]="queryService.retriever_knn_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
+    <mat-form-field><mat-label>SOM vectors</mat-label><mat-select [(ngModel)]="queryService.retriever_som_selection"><mat-option *ngFor="let retriever of retrievers" [value]="retriever">{{retriever}}</mat-option></mat-select></mat-form-field>
     <mat-form-field><mat-label>Grid wideness</mat-label><mat-select [disabled]="queryService.mode_manual" [(ngModel)]="queryService.mode_selection"><mat-option *ngFor="let mode of queryService.query_mode" [value]="mode">{{mode}}</mat-option></mat-select></mat-form-field>
     <mat-checkbox [disabled]="queryService.isOverview()" [(ngModel)]="queryService.mode_manual">manual range</mat-checkbox>
     <mat-slider [disabled]="(!queryService.mode_manual||queryService.isOverview())" [style.width]="'auto'" [(ngModel)]="queryService.deepness" max="100" min="1" step="1"
