@@ -23,16 +23,18 @@
   </div>
 
   <div *ngIf="!inFocus && queryService.hasFeedback(segment.segmentId)"  style="display: flex;justify-content: end;">
-    <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, false)" style="color:red;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_down</mat-icon>
-    <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, true)" style="color:green;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_up</mat-icon>
+    <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, 'blacklist')" style="color:red;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">remove_circle</mat-icon>
+    <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, 'negative')" style="color:red;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_down</mat-icon>
+    <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, 'positive')" style="color:green;z-index: 1;background: white;border-radius: 5px;margin: 20px 4px;padding: 2px;">thumb_up</mat-icon>
   </div>
 
   <div *ngIf="inFocus" style="position: relative;top: 32px;height: 35px;display: flex;justify-content: space-between;">
-    <button (click)="queryService.setFeedback(segment.segmentId, false)" [ngStyle]="{'background-color': queryService.getFeedbackColor(segment.segmentId, false)}" style="display: flex;justify-content: center;align-items: center;border: 3px solid red;padding: 0;cursor:pointer;width: 35px;">
-      <mat-icon style="color: red;">thumb_down</mat-icon>
+    <button (click)="queryService.setFeedback(segment.segmentId, (queryService.hasFeedbackActive(segment.segmentId, 'negative') || queryService.hasFeedbackActive(segment.segmentId, 'blacklist')) ? 'blacklist' : 'negative')" (contextmenu)="$event.preventDefault(); queryService.setFeedback(segment.segmentId, 'blacklist')" [ngStyle]="{'background-color': queryService.hasFeedbackActive(segment.segmentId, 'negative') ? queryService.getFeedbackColor(segment.segmentId, 'negative') : queryService.getFeedbackColor(segment.segmentId, 'blacklist')}" style="display: flex;justify-content: center;align-items: center;border: 3px solid red;padding: 0;cursor:pointer;width: 35px;">
+      <mat-icon *ngIf="!queryService.hasFeedbackActive(segment.segmentId, 'blacklist')" style="color: red;">thumb_down</mat-icon>
+      <mat-icon *ngIf="queryService.hasFeedbackActive(segment.segmentId, 'blacklist')" style="color: red;">remove_circle</mat-icon>
     </button>
     <button (click)="onTileClicked($event)" style="padding: 0;cursor:pointer;background: none;display: flex;flex-grow: 1;border:0;"></button>
-    <button (click)="queryService.setFeedback(segment.segmentId, true)" [ngStyle]="{'background-color': queryService.getFeedbackColor(segment.segmentId, true)}" style="display: flex;justify-content: center;align-items: center;border: 3px solid green;padding: 0;cursor:pointer;width: 35px;">
+    <button (click)="queryService.setFeedback(segment.segmentId, 'positive')" [ngStyle]="{'background-color': queryService.getFeedbackColor(segment.segmentId, 'positive')}" style="display: flex;justify-content: center;align-items: center;border: 3px solid green;padding: 0;cursor:pointer;width: 35px;">
       <mat-icon style="color: green;">thumb_up</mat-icon>
     </button>
   </div>

@@ -382,8 +382,9 @@ export class QueryService {
   }
 
   public trainSOM() {
-    let positives = Array.from(this.feedback).filter(([_,tag]) => tag).map(([id]) => id);
-    let negatives = Array.from(this.feedback).filter(([_,tag]) => !tag).map(([id]) => id);
+    let positives = Array.from(this.feedback).filter(([_,tag]) => tag==='positive').map(([id]) => id);
+    let negatives = Array.from(this.feedback).filter(([_,tag]) => tag==='negative').map(([id]) => id);
+    let blacklist = Array.from(this.feedback).filter(([_,tag]) => tag==='blacklist').map(([id]) => id);
     var range = this._deepness;
     if (!this.mode_manual) {
       switch (this.mode_selection) {
@@ -405,7 +406,7 @@ export class QueryService {
       }
     }
     if (range === -1 || positives.length > 0) {
-      this._socket.next(new SomTrainQuery(this.size, this.retriever_knn_selection, this.retriever_som_selection, range, positives, negatives, new ReadableQueryConfig(null)));
+      this._socket.next(new SomTrainQuery(this.size, this.retriever_knn_selection, this.retriever_som_selection, range, positives, negatives, blacklist, new ReadableQueryConfig(null)));
       this._cid = null;
     }
     return true;
@@ -431,14 +432,14 @@ export class QueryService {
     return true;
   }
 
-  private feedback: Map<string, boolean> = new Map();
+  private feedback: Map<string, string> = new Map();
   private feedback_segments: SegmentScoreContainer[] = [];
 
   get feedbackSegments(): SegmentScoreContainer[] {
     return this.feedback_segments;
   }
 
-  public setFeedback(elem: string, feedback: boolean) {
+  public setFeedback(elem: string, feedback: string) {
     if (this.hasFeedbackActive(elem, feedback)) {
       this.feedback.delete(elem);
       this.feedback_segments = this.feedback_segments.filter(el => el.segmentId !== elem);
@@ -453,11 +454,11 @@ export class QueryService {
     this.feedback_segments = [];
   }
 
-  public getFeedbackColor(elem: string, wish: boolean) : string {
-    return this.hasFeedbackActive(elem, wish) ? (wish ? 'lightgreen' : 'lightpink') : 'rgba(0, 0, 0, 0.7)';
+  public getFeedbackColor(elem: string, wish: string) : string {
+    return this.hasFeedbackActive(elem, wish) ? (wish==='positive' ? 'lightgreen' : 'lightpink') : 'rgba(0, 0, 0, 0.7)';
   }
 
-  public hasFeedbackActive(elem: string, wish: boolean) : boolean {
+  public hasFeedbackActive(elem: string, wish: string) : boolean {
     return this.feedback.has(elem) && this.feedback.get(elem) === wish;
   }
 
