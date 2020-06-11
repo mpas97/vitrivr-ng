@@ -36,7 +36,7 @@
       <mat-icon>help</mat-icon>
     </button>
 
-    <button (click)="container.onMltButtonClicked(segment)" (contextmenu)="$event.preventDefault(); _queryService.setFeedback(segment.segmentId, true)" mat-icon-button matTooltip="More-like-this">
+    <button (click)="container.onMltButtonClicked(segment)" (contextmenu)="$event.preventDefault(); _queryService.setFeedback(segment.segmentId, 'positive')" mat-icon-button matTooltip="More-like-this">
       <mat-icon>youtube_searched_for</mat-icon>
     </button>
 
