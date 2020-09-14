@@ -7,7 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {ContainerPipesModule} from '../../shared/pipes/containers/container-pipes.module';
 import {VbsModule} from '../../core/vbs/vbs.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {VgCoreModule} from 'videogular2/core';
+import {VgCoreModule} from '@videogular/ngx-videogular/core';
 import {SomToolbarComponent} from './som-toolbar.component';
 import {HelpDialogComponent} from './help-dialog.component';
 

@@ -14,7 +14,6 @@ import {VbsSubmissionService} from '../../core/vbs/vbs-submission.service';
 import { AbstractSomSegmentResultsViewComponent } from '../abstract-som-segments-results-view.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'som-overview',
   templateUrl: 'som.component.html',
   styleUrls: ['som.component.css'],

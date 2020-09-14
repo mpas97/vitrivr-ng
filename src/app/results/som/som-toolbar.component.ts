@@ -6,7 +6,6 @@ import {HelpDialogComponent} from './help-dialog.component';
 
 
 @Component({
-  moduleId: module.id,
   selector: 'som-toolbar',
   templateUrl: 'som-toolbar.component.html',
   styleUrls: ['./som-toolbar.component.css']

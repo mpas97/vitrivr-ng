@@ -8,7 +8,7 @@ import {SomComponent} from './som.component';
 import {ContainerPipesModule} from '../../shared/pipes/containers/container-pipes.module';
 import {VbsModule} from '../../core/vbs/vbs.module';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {VgCoreModule} from 'videogular2/core';
+import {VgCoreModule} from '@videogular/ngx-videogular/core';
 import {SomResultSegmentPreviewTileModule} from '../som-result-segment-preview-tile/som-result-segment-preview-tile.module';
 import {SomToolbarModule} from './som-toolbar.module';
 
