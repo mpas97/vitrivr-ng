@@ -3,7 +3,6 @@ import {MediaObjectScoreContainer} from '../../shared/model/results/scores/media
 import {SegmentScoreContainer} from '../../shared/model/results/scores/segment-score-container.model';
 import {Observable} from 'rxjs';
 import {ResultsContainer} from '../../shared/model/results/scores/results-container.model';
-import {AbstractSegmentResultsViewComponent} from '../abstract-segment-results-view.component';
 import {QueryService} from '../../core/queries/query.service';
 import {SelectionService} from '../../core/selection/selection.service';
 import {FilterService} from '../../core/queries/filter.service';
@@ -14,6 +13,7 @@ import {ConfigService} from '../../core/basics/config.service';
 import {ResolverService} from '../../core/basics/resolver.service';
 import {MatDialog} from '@angular/material/dialog';
 import {VbsSubmissionService} from '../../core/vbs/vbs-submission.service';
+import { AbstractSomSegmentResultsViewComponent } from '../abstract-som-segments-results-view.component';
 
 @Component({
 
@@ -22,7 +22,7 @@ import {VbsSubmissionService} from '../../core/vbs/vbs-submission.service';
   styleUrls: ['mini-gallery.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MiniGalleryComponent extends AbstractSegmentResultsViewComponent<SegmentScoreContainer[]> {
+export class MiniGalleryComponent extends AbstractSomSegmentResultsViewComponent<SegmentScoreContainer[]> {
 
   constructor(_cdr: ChangeDetectorRef,
               _queryService: QueryService,
@@ -47,6 +47,10 @@ export class MiniGalleryComponent extends AbstractSegmentResultsViewComponent<Se
 
   scrollIncrement(): number {
     return 500;
+  }
+
+  get queryService(): QueryService{
+    return this._queryService;
   }
 
   /**

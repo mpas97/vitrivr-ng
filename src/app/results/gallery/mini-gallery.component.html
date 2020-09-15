@@ -5,10 +5,17 @@
   <mat-spinner></mat-spinner>
 </p>
 
-<div (scrolled)="incrementCount()" [fromRoot]="true" [infiniteScrollContainer]="'#scrollable'"
+<div [ngStyle]="{'padding-bottom' : queryService.feedbackSegments.length ? '135px' : '0'}" (scrolled)="incrementCount()" [fromRoot]="true" [infiniteScrollContainer]="'#scrollable'"
      [infiniteScrollDistance]="1" [infiniteScrollUpDistance]="2" [alwaysCallback]="true" class="mini-gallery"
      infiniteScroll>
-  <app-result-segment-preview-tile
+  <som-result-segment-preview-tile
       *ngFor="let segment of (((dataSource | async) | OrderByScorePipe | FilterPipe : (filters|async))) | LimitPipe : count; trackBy: segmentTracking"
-      [container]="this" [score]="segment.score" [segment]="segment"></app-result-segment-preview-tile>
+      [container]="this" [score]="segment.score" [segment]="segment"></som-result-segment-preview-tile>
+</div>
+
+<div *ngIf="queryService.feedbackSegments.length" style="display:flex;background: gray;position: fixed;bottom: 0;left:0;width: 100%;border-top: 15px solid gray;z-index: 200;justify-content: center;">
+  <div style="display:flex;overflow: scroll;max-width: calc(100% - 600px);">
+      <som-result-segment-preview-tile *ngFor="let segment of queryService.feedbackSegments"
+      [container]="this" [score]="1" [segment]="segment"></som-result-segment-preview-tile>
+  </div>
 </div>

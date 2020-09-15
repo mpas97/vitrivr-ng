@@ -2,7 +2,6 @@ import {ChangeDetectionStrategy, ChangeDetectorRef, Component} from '@angular/co
 import {MediaObjectScoreContainer} from '../../shared/model/results/scores/media-object-score-container.model';
 import {Observable} from 'rxjs';
 import {ResultsContainer} from '../../shared/model/results/scores/results-container.model';
-import {AbstractSegmentResultsViewComponent} from '../abstract-segment-results-view.component';
 import {SegmentScoreContainer} from '../../shared/model/results/scores/segment-score-container.model';
 import {EventBusService} from '../../core/basics/event-bus.service';
 import {SelectionService} from '../../core/selection/selection.service';
@@ -14,6 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {ResolverService} from '../../core/basics/resolver.service';
 import {MatDialog} from '@angular/material/dialog';
 import {VbsSubmissionService} from '../../core/vbs/vbs-submission.service';
+import { AbstractSomSegmentResultsViewComponent } from '../abstract-som-segments-results-view.component';
 
 @Component({
   selector: 'app-list',
@@ -21,7 +21,7 @@ import {VbsSubmissionService} from '../../core/vbs/vbs-submission.service';
   styleUrls: ['list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent extends AbstractSegmentResultsViewComponent<MediaObjectScoreContainer[]> {
+export class ListComponent extends AbstractSomSegmentResultsViewComponent<MediaObjectScoreContainer[]> {
 
   constructor(_cdr: ChangeDetectorRef,
               _queryService: QueryService,
@@ -37,6 +37,10 @@ export class ListComponent extends AbstractSegmentResultsViewComponent<MediaObje
   ) {
     super(_cdr, _queryService, _filterService, _selectionService, _eventBusService, _router, _snackBar, _configService, _resolver, _dialog, _vbs);
     this._count = this.scrollIncrement() * 5;
+  }
+
+  get queryService(): QueryService{
+    return this._queryService;
   }
 
   /** Name of this ListComponent. */
