@@ -11,6 +11,7 @@ import {bufferCount, flatMap, map} from 'rxjs/operators';
 import {FilterService} from '../core/queries/filter.service';
 import {QueryContainerComponent} from './containers/query-container.component';
 import {TemporalFusionFunction} from '../shared/model/results/fusion/temporal-fusion-function.model';
+import { QueryTerm } from 'app/core/openapi';
 
 
 @Component({
@@ -63,20 +64,20 @@ export class QuerySidebarComponent implements OnInit {
         context.set('q:categories', t.categories);
         switch (t.type) {
           // TODO Why is there no boolean case?
-          case 'IMAGE':
+          case QueryTerm.TypeEnum.IMAGE:
             return new InteractionEventComponent(InteractionEventType.QUERY_IMAGE, context);
-          case 'AUDIO':
+          case QueryTerm.TypeEnum.AUDIO:
             return new InteractionEventComponent(InteractionEventType.QUERY_AUDIO, context);
-          case 'MOTION':
+          case QueryTerm.TypeEnum.MOTION:
             return new InteractionEventComponent(InteractionEventType.QUERY_MOTION, context);
-          case 'MODEL3D':
+          case QueryTerm.TypeEnum.MODEL3D:
             return new InteractionEventComponent(InteractionEventType.QUERY_MODEL3D, context);
-          case 'SEMANTIC':
+          case QueryTerm.TypeEnum.SEMANTIC:
             return new InteractionEventComponent(InteractionEventType.QUERY_SEMANTIC, context);
-          case 'TEXT':
+          case QueryTerm.TypeEnum.TEXT:
             context.set('q:value', t.data);
             return new InteractionEventComponent(InteractionEventType.QUERY_FULLTEXT, context);
-          case 'TAG':
+          case QueryTerm.TypeEnum.TAG:
             context.set('q:value', t.data);
             // console.log(`[Research] context=${JSON.stringify(context)}`);
             // FIXME Why is the context empty here? should have at least a q:categories and q:value entry
