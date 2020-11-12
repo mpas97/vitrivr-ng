@@ -1,8 +1,7 @@
 import {Component, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MetadataLookupService} from '../core/lookup/metadata-lookup.service';
+import {MetadataService} from '../core/openapi/api/metadata.service';
 import {QueryService} from '../core/queries/query.service';
-import {MediaObject} from '../shared/model/media/media-object.model';
 import {ResolverService} from '../core/basics/resolver.service';
 import {SegmentScoreContainer} from '../shared/model/results/scores/segment-score-container.model';
 import {Location} from '@angular/common';
@@ -45,7 +44,7 @@ export class ObjectdetailsComponent {
   constructor(private _route: ActivatedRoute,
               private _router: Router,
               private _snackBar: MatSnackBar,
-              private _metadataLookup: MetadataLookupService,
+              private _metadataLookup: MetadataService,
               private _query: QueryService,
               private  _eventBusService: EventBusService,
               private _location: Location,
